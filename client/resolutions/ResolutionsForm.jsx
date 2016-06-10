@@ -5,17 +5,23 @@ export default class ResolutionsForm extends Component {
 	addResolution(event){
 		event.preventDefault();
 		var text = this.refs.resolution.value.trim();
-
-		Meteor.call('addResolution',text , ()=>{
-			this.refs.resolution.value = "";
-		});
-		
+		if(text){
+			Meteor.call('addResolution',text , (error , data)=>{
+				if(error){
+					Bert.alert('Please login before submitting','danger', 'fixed-top','fa-frown-o')
+				}else{
+					this.refs.resolution.value = "";
+				}
+			});
+		}else{
+			Bert.alert('Please write a resolution','danger', 'fixed-top','fa-frown-o')
+		}
 	}
 	render(){
 		return (
 			<form className="new-resolution" onSubmit={this.addResolution.bind(this)}>
-					<input 
-						type="text" 
+					<input
+						type="text"
 						ref="resolution"
 						placeholder="Finish React Meteor Series" />
 
